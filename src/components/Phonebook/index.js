@@ -1,1 +1,1 @@
-export { FeedbackOptions } from './ContactForm';
+export { FeedbackOptions } from './ContactsForm';

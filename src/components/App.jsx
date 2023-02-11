@@ -1,5 +1,5 @@
-import { ContactForm } from './Phonebook/ContactForm';
-import { ContactList } from './Phonebook/ContactList';
+import { ContactForm } from './Phonebook/ContactsForm';
+import { ContactList } from './Phonebook/ContactsList';
 import { Filter } from './Phonebook/Filter';
 import { SectionContacts, SectionPhonebook } from './Phonebook/Sections';
 

@@ -7,7 +7,7 @@ import {
 } from './Phonebook.styled';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from 'redux/contacts/contacts.slice';
+import { postContact } from 'redux/operations';
 
 export const ContactForm = () => {
   const contacts = useSelector(state => state.contacts.items);
@@ -40,7 +40,7 @@ export const ContactForm = () => {
     }
 
     //Інакше додає новий контакт
-    dispatch(addContact(name, number));
+    dispatch(postContact(name, number));
     clearForm();
   };
 

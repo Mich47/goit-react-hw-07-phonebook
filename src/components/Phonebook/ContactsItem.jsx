@@ -6,12 +6,12 @@ import {
   TextStyled,
 } from './Phonebook.styled';
 
-export const ContactsItem = ({ name, number, onDelete }) => {
+export const ContactsItem = ({ name, phone, onDelete }) => {
   return (
     <ContactsItemStyled>
       <Box display="flex" alignItems="center" justifyContent="space-between">
         <TextStyled>
-          {name}: {number}
+          {name}: {phone}
         </TextStyled>
         <ButtonStyled
           fontSize="xs"
@@ -29,6 +29,6 @@ export const ContactsItem = ({ name, number, onDelete }) => {
 
 ContactsItem.propTypes = {
   name: PropTypes.string.isRequired,
-  number: PropTypes.string.isRequired,
+  phone: PropTypes.string.isRequired,
   onDelete: PropTypes.func.isRequired,
 };
