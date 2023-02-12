@@ -1,23 +1,24 @@
-import { Box } from 'components/Box';
-import { InputStyled, LabelStyled } from './Phonebook.styled';
 import { useDispatch, useSelector } from 'react-redux';
+import Box from '@mui/material/Box';
 import { setFilter } from 'redux/filter/filter.slice';
+import { TextField } from '@mui/material';
+import { selectFilter } from 'redux/contacts/contacts.selectors';
 
 export const Filter = () => {
-  const filter = useSelector(state => state.filter);
+  const filter = useSelector(selectFilter);
 
   const dispatch = useDispatch();
 
   const handleChangeFilter = event => {
-    const { value } = event.target;
-    dispatch(setFilter(value));
+    dispatch(setFilter(event.target.value));
   };
 
   return (
-    <Box display="flex" flexDirection="column">
-      <LabelStyled htmlFor="filter">Find contacts by name</LabelStyled>
-      <InputStyled
+    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+      <TextField
         id="filter"
+        label="Find contacts by name"
+        variant="outlined"
         value={filter}
         type="text"
         name="filter"

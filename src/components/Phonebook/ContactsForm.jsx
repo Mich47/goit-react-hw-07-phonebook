@@ -1,16 +1,14 @@
 import { Box } from 'components/Box';
-import {
-  ButtonStyled,
-  FormStyled,
-  InputStyled,
-  LabelStyled,
-} from './Phonebook.styled';
+import { FormStyled } from './Phonebook.styled';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { postContact } from 'redux/operations';
+import { selectContacts } from 'redux/contacts/contacts.selectors';
+import { Button, TextField } from '@mui/material';
 
 export const ContactForm = () => {
-  const contacts = useSelector(state => state.contacts.items);
+  const contacts = useSelector(selectContacts);
 
   const dispatch = useDispatch();
 
@@ -40,7 +38,8 @@ export const ContactForm = () => {
     }
 
     //Інакше додає новий контакт
-    dispatch(postContact(name, number));
+    dispatch(postContact({ name, phone: number }));
+    toast.success('Contact added successfully!');
     clearForm();
   };
 
@@ -59,33 +58,47 @@ export const ContactForm = () => {
   return (
     <FormStyled onSubmit={event => handleSubmitForm(event, name, number)}>
       <Box display="flex" flexDirection="column">
-        <LabelStyled htmlFor="name">Name</LabelStyled>
-        <InputStyled
+        <TextField
+          inputProps={{
+            // inputMode: 'numeric',
+            pattern:
+              "^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$",
+            title:
+              "Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan",
+          }}
           id="name"
+          label="Name"
+          variant="outlined"
           value={name}
           type="text"
           name="name"
-          pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-          title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
           required
           autoFocus
           onChange={changeName}
         />
       </Box>
       <Box display="flex" flexDirection="column">
-        <LabelStyled htmlFor="number">Number</LabelStyled>
-        <InputStyled
+        <TextField
+          inputProps={{
+            inputMode: 'numeric',
+            pattern:
+              '\\+?\\d{1,4}?[-.\\s]?\\(?\\d{1,3}?\\)?[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,9}',
+            title:
+              'Phone number must be digits and can contain spaces, dashes, parentheses and can start with +',
+          }}
           id="number"
+          label="Number"
+          variant="outlined"
           value={number}
           type="tel"
           name="number"
-          pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-          title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
           required
           onChange={changeNumber}
         />
       </Box>
-      <ButtonStyled type="submit">Add contact</ButtonStyled>
+      <Button variant="contained" type="submit">
+        Add contact
+      </Button>
     </FormStyled>
   );
 };

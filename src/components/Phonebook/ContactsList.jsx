@@ -1,13 +1,20 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteContact, fetchContacts } from 'redux/operations';
+import {
+  selectError,
+  selectFilteredContacts,
+  selectIsLoading,
+} from 'redux/contacts/contacts.selectors';
+import { fetchContacts } from 'redux/operations';
 import { ContactsItem } from './ContactsItem';
-import { ContactsListStyled } from './Phonebook.styled';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+import { ContactsListStyled, TextStyled } from './Phonebook.styled';
 
 export const ContactList = () => {
-  const contacts = useSelector(state => state.contacts.items);
-  const isLoading = useSelector(state => state.contacts.isLoading);
-  const filter = useSelector(state => state.filter);
+  const isLoading = useSelector(selectIsLoading);
+  const error = useSelector(selectError);
+  const filteredContacts = useSelector(selectFilteredContacts);
 
   const dispatch = useDispatch();
 
@@ -15,30 +22,30 @@ export const ContactList = () => {
     dispatch(fetchContacts());
   }, [dispatch]);
 
-  const handleDeleteContact = id => dispatch(deleteContact(id));
-
-  const handleFilterContacts = query =>
-    contacts.filter(({ name }) =>
-      name.toLowerCase().includes(query.toLowerCase())
-    );
-
-  const renderContacts = filter ? handleFilterContacts(filter) : contacts;
-  // console.log('renderContacts ', renderContacts);
   return (
     <>
-      {!isLoading && (
+      {isLoading && (
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          <CircularProgress />
+        </Box>
+      )}
+
+      {!isLoading && !error && (
         <ContactsListStyled>
-          {renderContacts.map(({ id, name, phone }) => (
+          {filteredContacts.map(({ id, name, phone }) => (
             <ContactsItem
               key={id}
+              id={id}
               name={name}
               phone={phone}
-              onDelete={() => {
-                handleDeleteContact(id);
-              }}
             ></ContactsItem>
           ))}
         </ContactsListStyled>
+      )}
+      {error && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', pt: [2] }}>
+          <TextStyled>Oops! Something went wrong. Please try again.</TextStyled>
+        </Box>
       )}
     </>
   );
